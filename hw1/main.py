@@ -1,4 +1,4 @@
-from os import stat
+from os import sep, stat
 import pandas as pd
 
 # Data collection
@@ -18,5 +18,11 @@ number_trump_mention = len(df.loc[df['trump_mention'].str.contains('T', regex=Fa
 stats = number_trump_mention/len(df)
 print("Number of Trump mentions = ", stats)
 
-# Adding to tsv
+# Adding tweets to tsv
 ds = df[['tweet_id', 'publish_date', 'content', 'trump_mention']]
+ds.to_csv("dataset.tsv", sep="\t", index=False)
+
+# Add results to tsv
+dr = {'result': ['frac-trump-result'], 'value': ["{:0.3f}".format(stats)]}
+result_df = pd.DataFrame(data=dr)
+result_df.to_csv("results.tsv", sep="\t", index=False)
