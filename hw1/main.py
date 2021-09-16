@@ -23,6 +23,6 @@ ds = df[['tweet_id', 'publish_date', 'content', 'trump_mention']]
 ds.to_csv("dataset.tsv", sep="\t", index=False)
 
 # Add results to tsv
-dr = {'result': ['frac-trump-result'], 'value': ["{:0.3f}".format(stats)]}
+dr = {'result': ['frac-trump-result'], 'value': ["{:0.3f}%".format(stats*100)]}
 result_df = pd.DataFrame(data=dr)
 result_df.to_csv("results.tsv", sep="\t", index=False)
