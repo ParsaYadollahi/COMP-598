@@ -3,7 +3,7 @@ import pandas as pd
 # Data collection
 df = pd.read_csv("./data.tsv", nrows=10000)
 df = df.loc[df['language'] == "English"]
-df = df[df['content'].str.contains('?', regex=False) == False]
+df = df[df['content'].str.contains('?', regex=False) == True]
 
 # Data annotation
 trump_mention = df['content'].str.contains("(?<!\w)Trump(?!\w)", regex=True)
