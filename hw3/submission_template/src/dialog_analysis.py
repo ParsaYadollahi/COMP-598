@@ -40,4 +40,4 @@ for pony in verbosity:
 
 # /Users/pyadollahicoveo.com/dev/school/COMP-598/hw3/submission_template/src/output.json
 with open(output_file, 'w', encoding='utf-8') as f:
-  js.dump({'counts  ': counts, 'verbosity': verbosity}, f, indent = 4)
+  js.dump({'count': counts, 'verbosity': verbosity}, f, indent = 4)

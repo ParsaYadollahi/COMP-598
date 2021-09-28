@@ -1,4 +1,4 @@
-# #!/bin/bash
+#!/bin/bash
 
 # The number of lines in the file
 wc -l < $1 | sed 's/ //g'
