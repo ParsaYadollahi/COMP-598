@@ -139,3 +139,4 @@ cython_debug/
 
 # Data files
 submission_template/data/nyc_311_limit.csv
+submission_template/data/data_trimmed.csv
