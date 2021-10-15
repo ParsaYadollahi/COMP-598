@@ -13,7 +13,7 @@ def main():
 
   parse_dates = ['created date', 'closed date']
   usecols = ['created date', 'closed date', 'incident zip']
-  df = pd.read_csv(f"{cwd}/data_trimmed.csv.csv", names=columns, usecols=usecols, parse_dates=parse_dates)
+  df = pd.read_csv(f"{cwd}/data/data_trimmed.csv", names=columns, usecols=usecols, parse_dates=parse_dates, low_memory=False)
   df = clean(df)
   calculate_response_times(df)
 
@@ -36,14 +36,15 @@ def clean(df: DataFrame) -> DataFrame:
 
   # Filter dates to be in 2020
   df_copy.dropna(subset=['incident zip'], inplace=True)
-  df['incident zip'] = df['incident zip'].astype(int).astype(str)
+  df_copy['incident zip'] = df_copy['incident zip'].astype(int)
+  df_copy['incident zip'] = df_copy['incident zip'].astype(str)
 
-  df.dropna(subset=['closed date'], inplace=True)
-  df = df[df['created date'] < df['closed date']]
+  df_copy.dropna(subset=['closed date'], inplace=True)
+  df_copy = df_copy[df_copy['created date'] < df_copy['closed date']]
 
-  df['closed month'] = [x.replace(second=0, minute=0, hour=0, day=1, year=2020) for x in df['closed date']]
-  df['closed month'] = df['closed month']
-  df['response time'] = (df['closed date'] - df['created date']).astype('timedelta64[h]')
+  df_copy['closed month'] = [x.replace(second=0, minute=0, hour=0, day=1, year=2020) for x in df_copy['closed date']]
+  df_copy['closed month'] = df_copy['closed month']
+  df_copy['response time'] = (df_copy['closed date'] - df_copy['created date']).astype('timedelta64[h]')
 
 
 
@@ -71,6 +72,9 @@ def calculate_response_times(df: DataFrame) -> None:
 
   response_by_month.to_csv(f"{cwd}/data/response_by_month.csv")
   response_by_zip.to_csv(f"{cwd}/data/response_by_zip.csv")
+
+  response_by_month.to_pickle(f'{cwd}/data/response_times_overall.pkl')
+  response_by_zip.to_pickle(f'{cwd}/data/response_times_by_zip.pkl')
 
 if __name__ == '__main__':
   main()
