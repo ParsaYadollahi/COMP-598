@@ -7,13 +7,15 @@ cwd = os.getcwd()
 
 def main():
 
-  column_file = open(f'{cwd}/data/header.txt', 'r').read()
-  columns = column_file.split(',')
+  column_file = open('/Users/pyadollahicoveo.com/dev/school/COMP-598/hw4/submission_template/data/header.txt', 'r')
+  columns = column_file.read().split(',')
   columns = [col.lower() for col in columns]
+  column_file.close()
 
   parse_dates = ['created date', 'closed date']
   usecols = ['created date', 'closed date', 'incident zip']
-  df = pd.read_csv(f"{cwd}/data/data_trimmed.csv", names=columns, usecols=usecols, parse_dates=parse_dates, low_memory=False)
+  df = pd.read_csv("/Users/pyadollahicoveo.com/dev/school/COMP-598/hw4/submission_template/data/data_trimmed.csv", names=columns, usecols=usecols, parse_dates=parse_dates, low_memory=False)
+  df.to_csv('/Users/pyadollahicoveo.com/dev/school/COMP-598/hw4/submission_template/data/data_trimmed_cols.csv')
   df = clean(df)
   calculate_response_times(df)
 
@@ -70,11 +72,8 @@ def calculate_response_times(df: DataFrame) -> None:
   response_by_month: DataFrame = df.drop('incident zip', axis=1).groupby('closed month').mean().reset_index()
   response_by_zip: DataFrame = df.groupby(['incident zip', 'closed month' ]).mean().reset_index()
 
-  response_by_month.to_csv(f"{cwd}/data/response_by_month.csv")
-  response_by_zip.to_csv(f"{cwd}/data/response_by_zip.csv")
-
-  response_by_month.to_pickle(f'{cwd}/data/response_times_overall.pkl')
-  response_by_zip.to_pickle(f'{cwd}/data/response_times_by_zip.pkl')
+  response_by_month.to_pickle('/Users/pyadollahicoveo.com/dev/school/COMP-598/hw4/submission_template/data/response_times_overall.pkl')
+  response_by_zip.to_pickle('/Users/pyadollahicoveo.com/dev/school/COMP-598/hw4/submission_template/data/response_times_by_zip.pkl')
 
 if __name__ == '__main__':
   main()

@@ -9,8 +9,6 @@ from bokeh.models import Select, ColumnDataSource, Dropdown, DatetimeTickFormatt
 
 
 # create a plot and style its properties
-# response_times_overall = pd.read_csv("./data/response_by_month.csv")
-# response_times_by_zip = pd.read_csv("./data/response_by_zip.csv")
 response_times_overall = pd.read_pickle(f'data/response_times_overall.pkl')
 response_times_by_zip = pd.read_pickle(f'data/response_times_by_zip.pkl')
 response_times_by_zip['closed month'] = pd.to_datetime(response_times_by_zip['closed month'])
@@ -18,8 +16,8 @@ response_times_overall['closed month'] = pd.to_datetime(response_times_overall['
 zip_codes = sorted(response_times_by_zip['incident zip'].unique())
 
 # Define menus
-menu_1 = Dropdown(label='ZIP code 1', menu=zip_codes)
-menu_2 = Dropdown(label='ZIP code 2', menu=zip_codes)
+dropdown1 = Dropdown(label='Incident zip 1', menu=zip_codes)
+dropdown2 = Dropdown(label='Incident zip 2', menu=zip_codes)
 
 # Initial plot
 zip_code_1 = response_times_by_zip[response_times_by_zip['incident zip'] == zip_codes[0]]
@@ -29,31 +27,32 @@ source_2 = ColumnDataSource(zip_code_2)
 source_overall = ColumnDataSource(response_times_overall)
 
 # Define plot
-graph = figure(plot_width=1200, plot_height=500, x_axis_type='datetime')
-graph.xaxis[0].ticker.desired_num_ticks = 9
+graph = figure(plot_width=1600, plot_height=700, x_axis_type='datetime')
+graph.xaxis[0].ticker.desired_num_ticks = 12
 graph.xaxis.formatter=DatetimeTickFormatter(
   hours=["%B"],
   days=["%B"],
   months=["%B"],
   years=["%B"]
 )
-graph.line(x='closed month', y='response time', source=source_1, color="red", legend_label='ZIP code 1')
-graph.line(x='closed month', y='response time', source=source_2, color="blue", legend_label='ZIP code 2')
-graph.line(x='closed month', y='response time', source=source_overall, color="green", legend_label='Overall')
+
+graph.line(x='closed month', y='response time', source=source_1, color="red", legend_label='Incident zip 1')
+graph.line(x='closed month', y='response time', source=source_2, color="blue", legend_label='Incident zip 2')
+graph.line(x='closed month', y='response time', source=source_overall, color="green", legend_label='Incident overall')
 
 # Define callbacks when menus are clicked
-def callback_1(event):
+def incident_zip_callback_1(event):
   source_1.data = response_times_by_zip[response_times_by_zip['incident zip'] == event.item]
 
-def callback_2(event):
+def incident_zip_callback_2(event):
   source_2.data = response_times_by_zip[response_times_by_zip['incident zip'] == event.item]
 
-menu_1.on_click(callback_1)
-menu_2.on_click(callback_2)
+dropdown1.on_click(incident_zip_callback_1)
+dropdown2.on_click(incident_zip_callback_2)
 
-graph.xaxis.axis_label = 'Closed month'
-graph.yaxis.axis_label = 'Average response time (hours)'
+graph.xaxis.axis_label = 'Close Month'
+graph.yaxis.axis_label = 'Response time (h)'
 
 # Arrange plots and widgets in layouts
-layout = column(menu_1, menu_2, graph)
+layout = column(dropdown1, dropdown2, graph)
 curdoc().add_root(layout)
