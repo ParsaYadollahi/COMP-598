@@ -55,6 +55,7 @@ class CleanTest(unittest.TestCase):
       json_output_list = cleanJSON.rename_title(json_output_list)
       for x in json_output_list:
         self.assertTrue('title' in x)
+
       self.close_files(json_file, 'test1')
 
 
