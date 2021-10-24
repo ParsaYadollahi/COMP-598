@@ -1,9 +1,14 @@
+from io import TextIOWrapper
+import json
 import unittest
 from pathlib import Path
 import os, sys
+import dateparser as dp
+from src.clean import CleanJSON
+from unittest.mock import MagicMock
+
 parentdir = Path(__file__).parents[1]
 sys.path.append(parentdir)
-
 
 class CleanTest(unittest.TestCase):
     def setUp(self):
@@ -58,9 +63,85 @@ class CleanTest(unittest.TestCase):
       self.assertEqual(self.test_file6.closed, True)
       print('All test files closed')
 
+    def parse_json(self, input_file: str):
+      assert(input_file)
+      cleanJSON = CleanJSON()
+      json_file: TextIOWrapper = open(input_file, 'r')
+      json_list_string = json_file.read().split('\n')
+      json_list_string = cleanJSON.clean_invalid_json(json_list_string)
+      return [json.loads(x) for x in json_list_string]
 
-    # def test_title(self):
-        # Just an idea for a test; write your implementation
+
+    def test_1(self):
+      cleanJSON = CleanJSON()
+      json_output_list = self.parse_json(self.test1)
+
+      json_output_list = cleanJSON.clean_title(json_output_list)
+      json_output_list = cleanJSON.rename_title(json_output_list)
+      for x in json_output_list:
+        self.assertTrue('title' in x)
+      self.close_files()
+
+
+    def test_2(self):
+      cleanJSON = CleanJSON()
+      json_output_list = self.parse_json(self.test2)
+
+      json_output_list = cleanJSON.standardize_time(json_output_list)
+      for x in json_output_list:
+        self.assertNotEqual(dp.parse(x['createdAt']), None)
+
+      self.close_files()
+
+    def test_3(self):
+      cleanJSON = CleanJSON()
+      json_list_string = self.parse_json(self.test3)
+      json_list_string = cleanJSON.clean_invalid_json(json_list_string)
+      for x in json_list_string:
+        try:
+          json.loads(x)
+        except ValueError as e:
+          Exception(e)
+      self.close_files()
+
+    def test_4(self):
+      cleanJSON = CleanJSON()
+      json_output_list = self.parse_json(self.test4)
+
+      json_output_list = cleanJSON.clean_authors(json_output_list)
+      for x in json_output_list:
+        self.assertTrue('author' in x and (x['author'] == "N/A" or x['author'] == None))
+
+      self.close_files()
+
+    def test_5(self):
+      cleanJSON = CleanJSON()
+      json_output_list = self.parse_json(self.test5)
+
+      json_output_list = cleanJSON.clean_total_count(json_output_list)
+      for x in json_output_list:
+        self.assertTrue(type(x['total_count'] == int))
+
+      self.close_files()
+
+    def test_6(self):
+      cleanJSON = CleanJSON()
+      json_output_list = self.parse_json(self.test6)
+
+      new_tags = []
+      print(json_output_list)
+      for x in json_output_list:
+        for idx, tag in enumerate(x['tags']):
+          if (len(tag.split()) == 3):
+            new_tags.append(tag)
+        x['tags'] = new_tags
+
+      json_output_list = cleanJSON.clean_tags(json_output_list)
+      for x in json_output_list:
+        self.assertTrue(len(x['tags'])%3 == 0)
+
+      self.close_files()
+
 
 
 if __name__ == '__main__':
