@@ -121,7 +121,5 @@ class CleanTest(unittest.TestCase):
 
       self.close_files(json_file, 'test6')
 
-
-
 if __name__ == '__main__':
     unittest.main()
