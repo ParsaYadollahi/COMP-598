@@ -33,9 +33,6 @@ class CleanTest(unittest.TestCase):
       print("All files exist.")
 
 
-    # def open_file(self, test_file: TextIOWrapper):
-    #   self.test_file1 = open(f'{self.test1}')
-
     def close_files(self, test_file: TextIOWrapper, test_file_name: str):
       test_file.close()
       self.assertEqual(test_file.closed, True)
