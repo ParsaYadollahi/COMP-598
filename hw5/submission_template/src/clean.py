@@ -26,10 +26,7 @@ class CleanJSON():
 
   def clean_title(self, json_list: list[str]):
     # 1 Remove all non title and title_text
-    for x in json_list:
-      if 'title' not in x and 'title_text' not in x:
-        json_list.remove(x)
-    return json_list
+    return [x for x in json_list if 'title' in x or 'title_text' in x]
 
   def rename_title(self, json_list: list[str]):
     # 2 Rename all title_text to title
@@ -43,7 +40,7 @@ class CleanJSON():
 
   def standardize_time(self, json_list: list[str]):
     # 3 - 4 standardize times
-    for x in json_list:
+    for x in json_list.copy():
       if dp.parse(x['createdAt']) is None:
         json_list.remove(x)
       else:
@@ -52,14 +49,11 @@ class CleanJSON():
 
   def clean_authors(self, json_list: list[str]):
     # 6 remove all post with invalid authors
-    for x in json_list:
-      if 'author' in x and (x['author'] == "N/A" or x['author'] == None):
-        json_list.remove(x)
-    return json_list
+    return [x for x in json_list if 'author' in x and (x['author'] != "N/A" and x['author'] != None)]
 
   def clean_total_count(self, json_list: list[str]):
     # 7- 8 total count clean
-    for x in json_list:
+    for x in json_list.copy():
       if 'total_count' not in x or type(x['total_count']) == int:
         continue
       if type(x['total_count']) != int and type(x['total_count']) != float and type(x['total_count']) != str:
@@ -91,9 +85,9 @@ class CleanJSON():
       x['tags'] = new_tags
     return json_list
 
-  def clean_invalid_json(self, json_list_string):
+  def clean_invalid_json(self, json_list_string: list[str]):
     # 5 Remove all Malformed JSON
-    for x in json_list_string:
+    for x in json_list_string.copy():
       if(len(x) == 0 or self.is_json(x) == False):
         json_list_string.remove(x)
 
