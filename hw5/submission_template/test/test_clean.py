@@ -74,7 +74,6 @@ class CleanTest(unittest.TestCase):
       cleanJSON = CleanJSON()
       json_file: TextIOWrapper = open(self.test3, 'r')
       json_list_string = self.parse_json(json_file)
-      json_list_string = cleanJSON.clean_invalid_json(json_list_string)
       for x in json_list_string:
         try:
           json.loads(x)

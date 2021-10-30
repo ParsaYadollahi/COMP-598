@@ -59,13 +59,9 @@ class CleanJSON():
       if type(x['total_count']) != int and type(x['total_count']) != float and type(x['total_count']) != str:
         json_list.remove(x)
 
-      if type(x['total_count']) == float:
-        x['total_count'] = int(x['total_count'])
-        continue
-
-      if (x['total_count'].startswith('-') and x['total_count'][1:].isdigit()) or x['total_count'].isdigit():
-        x['total_count'] = int(x['total_count'])
-      else:
+      try:
+        x['total_count'] = int(float(x['total_count']))
+      except ValueError:
         json_list.remove(x)
     return json_list
 
