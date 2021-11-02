@@ -16,18 +16,19 @@ def get_posts(sub_reddit_name):
       print("Request Fails.")
       exit(0)
 
-    # print(data.json()['data']['children'])
-
     posts = data.json()['data']['children']
     return posts
 
 
 def write_posts_to_file(posts, filename):
     # posts is list of json
-    with open(filename, 'w') as outfile:
+    children = []
+    with open(filename, 'w', encoding='utf-8') as outfile:
       for post in posts:
-        outfile.write(json.dumps(post) + '\n')
+        for child in post:
+          children.append(child)
 
+      json.dump(children, outfile, ensure_ascii=False, indent=4)
 
 
 
