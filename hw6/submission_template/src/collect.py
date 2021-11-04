@@ -44,10 +44,10 @@ if __name__ == '__main__':
   for i in subreddits_by_subs:
     post_by_subs.append(get_posts(i))
 
-  write_posts_to_file(post_by_subs, "sample1.json")
+  write_posts_to_file(post_by_subs, "../sample1.json")
 
   post_by_day = []
   for i in subreddits_by_day:
     post_by_day.append(get_posts(i))
 
-  write_posts_to_file(post_by_day, "sample2.json")
+  write_posts_to_file(post_by_day, "../sample2.json")
