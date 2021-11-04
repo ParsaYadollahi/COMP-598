@@ -12,10 +12,11 @@ def compute_title_length() -> int:
   output_data = json.load(posts_file)
 
   for data in output_data:
-    title_lengths += len(data['data']['title'])
+    for word in data['data']['title'].split():
+      title_lengths += len(word)
     title_counter += 1
 
   return title_lengths / title_counter
 
 if __name__ == '__main__':
-  print('The average title lenght is {} words.'.format(compute_title_length()))
+  print('The average title lenght is {} characters.'.format(compute_title_length()))
