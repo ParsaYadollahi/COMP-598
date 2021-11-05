@@ -10,7 +10,7 @@ import json
 def get_posts(sub_reddit_name):
     num_posts = 100
     try:
-      data = requests.get(f'http://api.reddit.com/r/{sub_reddit_name}/top?limit={num_posts}',
+      data = requests.get(f'http://api.reddit.com/r/{sub_reddit_name}/new?limit={num_posts}',
                           headers={'User-Agent': 'macos:requests (by /u/CoMpScIiZeZ)'})
     except requests.exceptions:
       print("Request Fails.")
