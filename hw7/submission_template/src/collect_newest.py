@@ -34,9 +34,9 @@ def write_posts_to_file(posts, filename):
 
       # json.dump(children, outfile, ensure_ascii=False, indent=4)
       outfile.write(
-        '[' +
+        '[\n' +
         ',\n'.join(json.dumps(i) for i in children) +
-        ']\n')
+        '\n]')
 
 
 
