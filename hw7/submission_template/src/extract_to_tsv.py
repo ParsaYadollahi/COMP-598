@@ -5,18 +5,6 @@ import json
 import sys
 
 def main():
-  ##### ARGPARSE ###### ??????
-  # parser = argparse.ArgumentParser()
-  # parser.add_argument('-o', type=str)
-  # parser.add_argument('-json_file', type=str)
-  # parser.add_argument('-num_posts_to_output', type=str)
-
-  # args = parser.parse_args()
-  # num_posts_to_output = int(args.num_posts_to_output)
-  # json_file = args.json_file
-  # output_file = args.o
-
-
   output_file = sys.argv[2]
   json_file = sys.argv[3]
   num_posts_to_output = int(sys.argv[4])

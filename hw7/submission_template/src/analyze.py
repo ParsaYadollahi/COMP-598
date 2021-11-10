@@ -1,11 +1,13 @@
 import argparse
 import pandas as pd
 import json
+import os
+import sys
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-o', help='The output file of this script.', required=False)
-  parser.add_argument('-i', help='The input file of this script.')
+  parser.add_argument('-i', help='The input file of this script.', required=True)
 
   args = parser.parse_args()
   in_file = args.i
@@ -16,6 +18,9 @@ def main():
 
   for category in categories:
     output.setdefault(category, 0)
+
+  if (not os.path.isfile(in_file)):
+    sys.exit("TSV file does not exist try another path")
 
   df = pd.read_csv(in_file, sep='\t', usecols=['coding'])
 
@@ -34,7 +39,6 @@ def main():
   else:
     with open(args.o, 'w', encoding='utf-8') as outfile:
       json.dump(new_output, outfile, indent=0)
-
 
 if __name__ == '__main__':
   main()
