@@ -5,15 +5,7 @@ import os.path as osp
 from collections import Counter
 import re
 
-def main():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-c', help='The input file of this script.', required=True)
-  parser.add_argument('-n', help='The number of words.', required=True, type=int)
-
-  args = parser.parse_args()
-  in_file = args.c
-  num_words = args.n
-
+def main(in_file, num_words):
   if not osp.isabs(in_file):
         in_file = osp.abspath(in_file)
 
@@ -50,14 +42,6 @@ def main():
   output4 = re.sub(r'"\s+\]', '"]', output3)
   print(output4)
 
-
-
-
-
-
-
-
-
 def compute_idf(data: dict, word: str):
   total_number_of_ponies = len(data.keys())
   number_of_ponies_that_use_word = 0
@@ -67,9 +51,16 @@ def compute_idf(data: dict, word: str):
       number_of_ponies_that_use_word += 1
 
   assert number_of_ponies_that_use_word != 0
-
   return math.log(float(total_number_of_ponies / number_of_ponies_that_use_word))
 
 
 if __name__ == '__main__':
-  main()
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-c', help='The input file of this script.', required=True)
+  parser.add_argument('-n', help='The number of words.', required=True, type=int)
+
+  args = parser.parse_args()
+  in_file = args.c
+  num_words = args.n
+
+  main(in_file=in_file, num_words=num_words)

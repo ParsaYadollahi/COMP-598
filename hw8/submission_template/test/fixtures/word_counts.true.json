@@ -1,0 +1,25 @@
+{
+  "applejack": {
+      "cc": 6,
+      "dd": 6
+  },
+  "fluttershy": {
+      "ii": 11,
+      "jj": 7
+  },
+  "pinkie pie": {
+      "hh": 10,
+      "rr": 10
+  },
+  "rainbow dash": {
+      "ee": 6
+  },
+  "rarity": {
+      "gg": 6,
+      "tt": 6,
+      "yy": 10
+  },
+  "twilight sparkle": {
+      "bb": 6
+  }
+}

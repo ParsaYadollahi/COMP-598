@@ -1,18 +1,16 @@
 import argparse
+from io import TextIOWrapper
 import pandas as pd
 import json
+import pathlib
 
-def main():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-o', help='The output file of this script.', required=True)
-  parser.add_argument('-d', help='The dialog file of this script.', required=True)
+def main(in_file, out_file):
+  in_file = str(pathlib.Path(__file__).parents[1].resolve()) + '/data/{}'.format(in_file)
 
-  args = parser.parse_args()
-  out_file = args.o
-  in_file = args.d
-
-  stopwords_path = './../data/stopwords.txt'
-  stopwords = open(stopwords_path).read().splitlines()
+  stopwords_path = str(pathlib.Path(__file__).parents[1].resolve()) + '{}'.format("/data/stopwords.txt")
+  stopwords_file: TextIOWrapper = open(stopwords_path, 'r')
+  stopwords = stopwords_file.read().splitlines()
+  stopwords_file.close()
 
   ponies_json = {
         'twilight sparkle': 0,
@@ -68,5 +66,14 @@ def preprocess_dialogues(f):
 
     return df
 
+
 if __name__ == '__main__':
-  main()
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-o', help='The output file of this script.', required=True)
+  parser.add_argument('-d', help='The dialog file of this script.', required=True)
+
+  args = parser.parse_args()
+  out_file = args.o
+  in_file = args.d
+
+  main(in_file=in_file, out_file=out_file)
