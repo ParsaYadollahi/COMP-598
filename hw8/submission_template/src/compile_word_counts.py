@@ -5,51 +5,53 @@ import json
 import pathlib
 
 def main(in_file, out_file):
-  in_file = str(pathlib.Path(__file__).parents[1].resolve()) + '/data/{}'.format(in_file)
 
   stopwords_path = str(pathlib.Path(__file__).parents[1].resolve()) + '{}'.format("/data/stopwords.txt")
   stopwords_file: TextIOWrapper = open(stopwords_path, 'r')
   stopwords = stopwords_file.read().splitlines()
   stopwords_file.close()
 
-  ponies_json = {
-        'twilight sparkle': 0,
-        'applejack': 0,
-        'rainbow dash': 0,
-        'rarity': 0,
-        'pinkie pie': 0,
-        'fluttershy': 0
+  ponies_set = {
+        'twilight sparkle',
+        'applejack',
+        'rainbow dash',
+        'rarity',
+        'pinkie pie',
+        'fluttershy'
     }
 
   # Remove punctuation and lower words
   df = preprocess_dialogues(in_file)
   output: dict = {}
 
-  for i in range(len(df['pony'])):
-    name = str(df.iloc[i, 0])
+  for word in range(len(df['pony'])):
+    name = str(df.iloc[word, 0])
+    dialogue = df.iloc[word, 1]
 
-    # init keys of dict
-    if name not in ponies_json:
+    # init keys (names) of dict
+    if name not in ponies_set:
       continue
     if name not in output:
       output[name] = {}
 
     # Count number of words
-    for word in df.iloc[i,1].split():
+    for word in dialogue.split():
       if word not in stopwords and word.isalpha():
+        # init values (words) of dict[pony]
         if word not in output[name]:
           output[name][word] = 1
         else:
           output[name][word] += 1
 
   # Remove elements with less than 5 words
-  for (k,v) in output.copy().items():
-    for (i,j) in v.copy().items():
-      if j < 5:
-        del v[i]
+  for (pony, word_set) in output.copy().items():
+    for (word, num_occurances) in word_set.copy().items():
+      if num_occurances < 5:
+        del output[pony][word]
 
-  with open(out_file, 'w') as o:
-    json.dump(output, o, indent=4, sort_keys=True)
+  with open(out_file, 'w') as output_file:
+    json.dump(output, output_file, indent=4, sort_keys=True)
+  output_file.close()
 
 
 def preprocess_dialogues(f):
@@ -62,9 +64,10 @@ def preprocess_dialogues(f):
 
     for i in range(len(df['pony'])):
       df.iloc[i, 0] = df.iloc[i, 0].lower()
-      df.iloc[i, 1] = df.iloc[i, 1].lower()
+      df.iloc[i, 1] = str(df.iloc[i, 1].lower())
 
-    return df
+  f.close()
+  return df
 
 
 if __name__ == '__main__':

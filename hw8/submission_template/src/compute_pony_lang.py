@@ -41,6 +41,7 @@ def main(in_file, num_words):
   output3 = re.sub(r'",\s+', '", ', output2)
   output4 = re.sub(r'"\s+\]', '"]', output3)
   print(output4)
+  return return_tfidf
 
 def compute_idf(data: dict, word: str):
   total_number_of_ponies = len(data.keys())
