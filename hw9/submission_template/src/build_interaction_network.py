@@ -12,9 +12,9 @@ class DF(Enum):
   NAME = 1
   DIALOGUE = 2
 
+exclude_ponies: set[str] = {'others', 'ponies', 'and', 'all'}
 
 def main():
-
   parser = argparse.ArgumentParser()
   parser.add_argument('-i', help='The input file of this script.', required=True)
   parser.add_argument('-o', help='The output file of this script.', required=False)
@@ -24,39 +24,47 @@ def main():
   out_file = args.o
 
   df: DataFrame = preprocess_dialogues(in_file)
+  pony_names: list[str] = df['pony'].tolist()
   output: dict = {}
+  p1: int = 0
+  p2: int = 1
 
-  # Do not consider "Fluttershy and other ponies"
-  exclude_ponies = {'others', 'ponies', 'and', 'all'}
+  # Sample 101 most commmon ponies EXCLUDING those with "all", "and", ...
+  most_common_ponies_101 = pony_names.copy()
+  for name in most_common_ponies_101:
+    if (exclude_pony(name)):
+      most_common_ponies_101.remove(name)
 
-
-  p1 = 0
-  p2 = 1
-
-
-  pony_names = df['pony'].tolist()
-  most_common_ponies = [e for e, i in Counter(pony_names).most_common(101)]
+  most_common_ponies_101: list[str] = [e for e, i in Counter(most_common_ponies_101).most_common(101)]
 
   while(p2 < len(pony_names)):
-    name1 = str(df.iloc[p1, DF.NAME.value])
-    name2 = str(df.iloc[p2, DF.NAME.value])
+    name1: str = pony_names[p1]
+    name2: str = pony_names[p2]
+    episode1: str = str(df.iloc[p1, DF.TITLE.value])
+    episode2: str = str(df.iloc[p2, DF.TITLE.value])
 
-    if name1 == name2:
+    # 101 most frequent characters
+    # Don’t include characters that contain xyz
+    if(exclude_pony(pony_names[p2]) or pony_names[p2] not in most_common_ponies_101):
+      while(p2 < len(pony_names) and (exclude_pony(pony_names[p2]) or pony_names[p2] not in most_common_ponies_101)):
+        # Increment p2 till find valid pony
+        p2 += 1
+      p1 = p2
+      p2 += 1
+      continue
+
+    # A character can’t talk to itself
+    # Respect episode boundaries
+    if name1 == name2 or episode1 != episode2:
       p1 += 1
       p2 += 1
       continue
 
-    if any(exlude in name2 for exlude in exclude_ponies) or name2 not in most_common_ponies:
-      del pony_names[p2]
-      p1 += 1
-      p2 += 1
-      continue
-
-    # TODO: EPISODE partition
-
+    # init output dict
     if name1 not in output:
       output[name1] = {}
 
+    # Increment interation
     if name2 not in output[name1]:
       output[name1][name2] = 1
     else:
@@ -65,7 +73,14 @@ def main():
     p1 += 1
     p2 += 1
 
-  print(json.dumps(output, indent=4, sort_keys=True))
+  with open(out_file, 'w') as output_file:
+    json.dump(output, output_file, indent=4, sort_keys=True)
+  output_file.close()
+
+
+def exclude_pony(name: str):
+  # Do not consider "Fluttershy and other ponies"
+  return any(exlude in name for exlude in exclude_ponies)
 
 
 def preprocess_dialogues(f):
