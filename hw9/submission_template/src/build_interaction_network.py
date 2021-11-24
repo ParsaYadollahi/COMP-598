@@ -1,5 +1,4 @@
 import argparse
-from os import name
 import pandas as pd
 from pandas.core.frame import DataFrame
 import json
@@ -96,7 +95,6 @@ def preprocess_dialogues(f):
 
   f.close()
   return df
-
 
 if __name__ == '__main__':
   main()
