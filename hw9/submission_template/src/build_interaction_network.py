@@ -30,7 +30,7 @@ def main():
 
   # Sample 101 most commmon ponies EXCLUDING those with "all", "and", ...
   most_common_ponies_101 = pony_names.copy()
-  for name in most_common_ponies_101:
+  for name in pony_names.copy():
     if (exclude_pony(name)):
       most_common_ponies_101.remove(name)
 
@@ -79,7 +79,7 @@ def main():
 
 def exclude_pony(name: str):
   # Do not consider "Fluttershy and other ponies"
-  return any(exlude in name for exlude in exclude_ponies)
+  return any(exlude in name.lower() for exlude in exclude_ponies)
 
 
 def preprocess_dialogues(f):

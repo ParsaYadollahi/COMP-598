@@ -7,6 +7,7 @@
         "braeburn": 1,
         "bulk biceps": 2,
         "cheerilee": 24,
+        "countess coloratura": 2,
         "cozy glow": 7,
         "cutie mark crusaders": 17,
         "diamond tiara": 26,
@@ -47,6 +48,7 @@
         "braeburn": 18,
         "capper": 3,
         "cheerilee": 2,
+        "countess coloratura": 13,
         "cutie mark crusaders": 4,
         "diamond tiara": 2,
         "discord": 20,
@@ -208,6 +210,11 @@
         "spike": 3,
         "sweetie belle": 12,
         "twilight sparkle": 6
+    },
+    "countess coloratura": {
+        "apple bloom": 1,
+        "applejack": 13,
+        "pinkie pie": 1
     },
     "cozy glow": {
         "apple bloom": 7,
@@ -915,6 +922,7 @@
         "capper": 4,
         "chancellor neighsay": 2,
         "cheerilee": 3,
+        "countess coloratura": 1,
         "cozy glow": 2,
         "cutie mark crusaders": 2,
         "derpy": 8,
