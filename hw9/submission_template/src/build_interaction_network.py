@@ -13,6 +13,10 @@ class DF(Enum):
 
 exclude_ponies: set[str] = {'others', 'ponies', 'and', 'all'}
 
+
+'''
+  python build_interaction_network.py -i /path/to/<script_input.csv> -o /path/to/<interaction_network.json>
+'''
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-i', help='The input file of this script.', required=True)

@@ -1,5 +1,5 @@
 {
 	"most_connected_by_num": ["twilight sparkle", "rainbow dash", "applejack"],
 	"most_connected_by_weight": ["twilight sparkle", "rainbow dash", "applejack"],
-
+	"most_central_by_betweenness": ["apple bloom", "applejack", "babs seed"]
 }
