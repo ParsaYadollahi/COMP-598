@@ -13,7 +13,6 @@ class DF(Enum):
 
 exclude_ponies: set[str] = {'others', 'ponies', 'and', 'all'}
 
-
 '''
   python build_interaction_network.py -i /path/to/<script_input.csv> -o /path/to/<interaction_network.json>
 '''
@@ -48,8 +47,8 @@ def main():
 
     # 101 most frequent characters
     # Don’t include characters that contain xyz
-    if(exclude_pony(pony_names[p2]) or pony_names[p2] not in most_common_ponies_101):
-      while(p2 < len(pony_names) and (exclude_pony(pony_names[p2]) or pony_names[p2] not in most_common_ponies_101)):
+    if(pony_names[p2] not in most_common_ponies_101):
+      while(p2 < len(pony_names) and (pony_names[p2] not in most_common_ponies_101)):
         # Increment p2 till find valid pony
         p2 += 1
       p1 = p2

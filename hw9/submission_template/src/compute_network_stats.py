@@ -62,10 +62,12 @@ def main():
 
 
   # Q3 - most_central_by_betweenness
+  b_c_list = list(betweenness_centrality(G).items())
+  b_c_list.sort(key=lambda x:x[1], reverse=True)
   i = 0
   f.write("\t\"most_central_by_betweenness\": [")
-  for k,v in betweenness_centrality(G).items():
-    f.write('"%s"' %k)
+  for v in b_c_list[:3]:
+    f.write('"%s"' %v[0])
     if i == 2:
       break
     i += 1
@@ -74,7 +76,6 @@ def main():
   f.write('}')
 
   f.close()
-
 
 if __name__ == '__main__':
   main()
